@@ -88,8 +88,10 @@ def add_indicators(
         raise IndicatorError("DataFrame is empty or None")
     out = df.copy()
     c = _require_close(out)
-    sma_periods = sma_periods or (20, 50)
-    ema_periods = ema_periods or (12, 26)
+    if sma_periods is None:
+        sma_periods = (20, 50)
+    if ema_periods is None:
+        ema_periods = (12, 26)
     for n in sma_periods:
         out[f"sma_{n}"] = sma(c, n)
     for n in ema_periods:
