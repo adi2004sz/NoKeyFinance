@@ -31,7 +31,7 @@ def ema(close: pd.Series, period: int) -> pd.Series:
     """Exponential moving average of close. Returns Series aligned with close."""
     if period < 1:
         raise IndicatorError("period must be >= 1")
-    return close.ewm(span=period, adjust=False, min_periods=period).mean()
+    return close.ewm(span=period, adjust=False, min_periods=1).mean()
 
 
 def rsi(close: pd.Series, period: int = 14) -> pd.Series:
@@ -44,8 +44,8 @@ def rsi(close: pd.Series, period: int = 14) -> pd.Series:
     delta = close.diff()
     gain = delta.where(delta > 0, 0.0)
     loss = (-delta).where(delta < 0, 0.0)
-    avg_gain = gain.ewm(alpha=1 / period, adjust=False, min_periods=period).mean()
-    avg_loss = loss.ewm(alpha=1 / period, adjust=False, min_periods=period).mean()
+    avg_gain = gain.ewm(alpha=1 / period, adjust=False, min_periods=1).mean()
+    avg_loss = loss.ewm(alpha=1 / period, adjust=False, min_periods=1).mean()
     rs = np.where(avg_loss == 0, np.where(avg_gain == 0, 1.0, np.inf), avg_gain / avg_loss)
     raw = 100 - (100 / (1 + rs))
     return pd.Series(np.clip(raw, 0.0, 100.0), index=close.index)
