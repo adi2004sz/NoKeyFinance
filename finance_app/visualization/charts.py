@@ -31,11 +31,14 @@ def plot_price_with_indicators(
     idx = _ensure_index(df)
     fig, ax = plt.subplots(figsize=figsize)
     ax.plot(idx, df["close"].values, label="Close", color="black", linewidth=1)
-    sma_cols = sma_cols or [c for c in df.columns if c.startswith("sma_")]
+    # None = auto-detect; explicit empty sequence = no overlay
+    if sma_cols is None:
+        sma_cols = [c for c in df.columns if c.startswith("sma_")]
+    if ema_cols is None:
+        ema_cols = [c for c in df.columns if c.startswith("ema_")]
     for col in sma_cols:
         if col in df.columns:
             ax.plot(idx, df[col].values, label=col, alpha=0.8)
-    ema_cols = ema_cols or [c for c in df.columns if c.startswith("ema_")]
     for col in ema_cols:
         if col in df.columns:
             ax.plot(idx, df[col].values, label=col, alpha=0.8)
@@ -60,7 +63,17 @@ def plot_volume(
         return fig
     idx = _ensure_index(df)
     fig, ax = plt.subplots(figsize=figsize)
-    colors = ["#26a69a" if df["close"].iloc[i] >= df["open"].iloc[i] else "#ef5350" for i in range(len(df))]
+    close_vals = df["close"].values
+    open_vals = df["open"].values
+    colors = []
+    for i in range(len(df)):
+        c, o = close_vals[i], open_vals[i]
+        if pd.isna(c) or pd.isna(o):
+            colors.append("#9e9e9e")  # neutral for missing
+        elif c >= o:
+            colors.append("#26a69a")
+        else:
+            colors.append("#ef5350")
     ax.bar(idx, df["volume"].values, color=colors, alpha=0.7, width=0.8)
     ax.set_title(f"{ticker} - Volume")
     ax.set_ylabel("Volume")

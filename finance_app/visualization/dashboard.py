@@ -30,7 +30,6 @@ def run() -> None:
             end = st.date_input("End", value=end_default).strftime("%Y-%m-%d")
         source = st.selectbox("Data source", options=["yahoo", "stooq"], index=0)
         show_indicators = st.checkbox("Show indicators (SMA, EMA, RSI)", value=True)
-        refresh = st.button("Refresh")
 
     if not ticker:
         st.warning("Enter a ticker symbol.")
@@ -61,8 +60,8 @@ def run() -> None:
     fig_price = plot_price_with_indicators(
         df,
         ticker,
-        sma_cols=list(df.columns[df.columns.str.startswith("sma_")]) if show_indicators else None,
-        ema_cols=list(df.columns[df.columns.str.startswith("ema_")]) if show_indicators else None,
+        sma_cols=list(df.columns[df.columns.str.startswith("sma_")]) if show_indicators else [],
+        ema_cols=list(df.columns[df.columns.str.startswith("ema_")]) if show_indicators else [],
     )
     st.pyplot(fig_price)
     plt.close(fig_price)

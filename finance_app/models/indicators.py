@@ -10,6 +10,9 @@ from finance_app.utils.logger import get_logger
 
 _log = get_logger(__name__)
 
+# Cap periods to avoid huge rolling windows (memory/CPU)
+MAX_INDICATOR_PERIOD: int = 500
+
 
 def _require_close(df: pd.DataFrame) -> pd.Series:
     """Return close series or raise IndicatorError."""
@@ -24,6 +27,7 @@ def sma(close: pd.Series, period: int) -> pd.Series:
     """Simple moving average of close. Returns Series aligned with close."""
     if period < 1:
         raise IndicatorError("period must be >= 1")
+    period = min(period, MAX_INDICATOR_PERIOD)
     return close.rolling(window=period, min_periods=1).mean()
 
 
@@ -31,6 +35,7 @@ def ema(close: pd.Series, period: int) -> pd.Series:
     """Exponential moving average of close. Returns Series aligned with close."""
     if period < 1:
         raise IndicatorError("period must be >= 1")
+    period = min(period, MAX_INDICATOR_PERIOD)
     return close.ewm(span=period, adjust=False, min_periods=1).mean()
 
 
@@ -41,6 +46,7 @@ def rsi(close: pd.Series, period: int = 14) -> pd.Series:
     """
     if period < 1:
         raise IndicatorError("period must be >= 1")
+    period = min(period, MAX_INDICATOR_PERIOD)
     delta = close.diff()
     gain = delta.where(delta > 0, 0.0)
     loss = (-delta).where(delta < 0, 0.0)
@@ -66,6 +72,7 @@ def volatility(
     """
     if window < 1:
         raise IndicatorError("window must be >= 1")
+    window = min(window, MAX_INDICATOR_PERIOD)
     ret = close.pct_change()
     vol = ret.rolling(window=window, min_periods=1).std()
     if annualize:

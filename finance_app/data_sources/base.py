@@ -62,5 +62,7 @@ class BaseDataSource(ABC):
                 out[c] = float("nan")
         out = out[list(OHLCV_COLUMNS)]
         out = out.dropna(how="all", subset=["open", "high", "low", "close"])
-        out["volume"] = out["volume"].fillna(0).astype("int64")
+        vol = out["volume"].fillna(0)
+        vol = vol.clip(lower=0)  # disallow negative volume from bad data
+        out["volume"] = vol.astype("int64")
         return out.sort_index()

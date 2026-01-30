@@ -19,9 +19,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    # When run as "python -m finance_app.main", launch streamlit so the app runs.
+    # When run as "python -m finance_app.main", __package__ is set; launch streamlit so the app runs.
     # When run as "streamlit run finance_app/main.py", streamlit executes this file and we render the app.
-    if "-m" in sys.argv:
+    if __package__:
         import os
         import subprocess
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
