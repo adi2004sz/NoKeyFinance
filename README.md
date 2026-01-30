@@ -1,15 +1,37 @@
 # NoKeyFinance
 
-Small Streamlit app for exploring historical market data (no API keys).
+Historical market data and charts with no API keys or signup. Uses Yahoo Finance and Stooq only.
 
-Data sources: Yahoo Finance (via `yfinance`) and Stooq (via `pandas-datareader`).
+## Features
 
-## Requirements
+- OHLCV data with optional date range (max 20 years)
+- Technical indicators: SMA (20, 50), EMA (12, 26), RSI, daily returns
+- Data sources: Yahoo (`yfinance`) and Stooq (`pandas-datareader`)
+- Export: CSV (dataset) and PNG (per chart)
+- Two UIs: React + FastAPI or Streamlit
 
-- Python 3.10+
-- Dependencies in `requirements.txt`
+## Run (React + FastAPI)
 
-## Run
+**Backend**
+
+```bash
+pip install -r requirements.txt
+uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Or: `python -m uvicorn api.main:app --reload --host 127.0.0.1 --port 8000`
+
+**Frontend**
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open http://localhost:5173. Vite proxies `/api` to the backend.
+
+## Run (Streamlit)
 
 ```bash
 pip install -r requirements.txt
@@ -18,14 +40,31 @@ streamlit run finance_app/main.py
 
 Or: `python -m finance_app.main`
 
+## Testing the API
+
+With the backend running:
+
+```bash
+# Health
+curl http://127.0.0.1:8000/api/health
+
+# OHLCV (example)
+curl "http://127.0.0.1:8000/api/ohlcv?ticker=AAPL&start=2024-01-01&end=2024-06-01&source=yahoo&show_indicators=true"
+```
+
+Query params: `ticker` (required), `start`, `end` (YYYY-MM-DD), `source` (yahoo | stooq), `show_indicators` (true | false).
+
 ## Usage
 
-Use the sidebar to choose a ticker, optional date range, and data source. Turn on “Show indicators” to overlay SMA/EMA and show the RSI panel.
+Sidebar: ticker, optional date range, source (Yahoo / Stooq), "Show indicators" for SMA/EMA/RSI. Fetch loads data; export CSV or PNG per chart.
 
 ## Tech
 
-Python, Streamlit, pandas, numpy, matplotlib.
+- **Backend**: Python, FastAPI, pandas, numpy, yfinance, pandas-datareader
+- **Frontend**: React (Vite), TypeScript, Recharts, html2canvas
+- **Legacy UI**: Streamlit
 
 ## Notes
 
-- A small local HTTP cache is enabled by default (5 min TTL). Disable with `NOKEYFINANCE_CACHE=0`.
+- HTTP cache enabled by default (5 min). Disable with `NOKEYFINANCE_CACHE=0`.
+- Ticker length and date range are limited to avoid abuse.
