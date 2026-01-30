@@ -10,6 +10,7 @@ from ..utils.exceptions import DataSourceError, ValidationError
 from ..utils.logger import get_logger
 from ..utils import validate_date_range, validate_ticker
 from ..utils.validators import MAX_DATE_RANGE_DAYS
+from ..utils.http_cache import install_http_cache
 
 _log = get_logger(__name__)
 
@@ -33,6 +34,7 @@ def get_ohlcv(
     source must be 'yahoo' or 'stooq'. Raises ValidationError or DataSourceError on failure.
     """
     ticker_clean = validate_ticker(ticker)
+    install_http_cache()
     now = datetime.now()
     if start is not None and end is not None:
         start_dt, end_dt = validate_date_range(

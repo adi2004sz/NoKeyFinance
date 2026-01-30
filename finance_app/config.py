@@ -10,7 +10,8 @@ DEFAULT_LOOKBACK_DAYS: int = 365
 
 # Cache (optional, for later use)
 CACHE_DIR: Path = PROJECT_ROOT / ".cache"
-CACHE_ENABLED: bool = False
+CACHE_ENABLED: bool = True
+CACHE_TTL_SECONDS: int = 300  # 5 minutes
 
 # Logging
 LOG_LEVEL: str = "INFO"

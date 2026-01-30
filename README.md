@@ -25,3 +25,7 @@ Use the sidebar to choose a ticker, optional date range, and data source. Turn o
 ## Tech
 
 Python, Streamlit, pandas, numpy, matplotlib.
+
+## Notes
+
+- A small local HTTP cache is enabled by default (5 min TTL). Disable with `NOKEYFINANCE_CACHE=0`.
