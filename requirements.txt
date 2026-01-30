@@ -1,4 +1,6 @@
 # NoKeyFinance - free data only, no API keys
+# setuptools provides distutils on Python 3.12+ (needed by pandas_datareader)
+setuptools>=65.0.0
 yfinance>=0.2.36
 pandas>=2.0.0
 pandas-datareader>=0.10.0
