@@ -1,4 +1,4 @@
-"""Orchestrates data fetch and indicator computation for analysis and charts."""
+"""Helpers for fetching data and computing indicators."""
 
 from typing import Optional, Sequence
 

@@ -1,4 +1,4 @@
-"""Orchestrates fetching OHLCV data from configured sources."""
+"""Fetch OHLCV data from configured sources."""
 
 from datetime import datetime, timedelta
 from typing import Optional

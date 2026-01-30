@@ -9,7 +9,7 @@ from .charts import (
 
 
 def run_dashboard() -> None:
-    """Run the Streamlit dashboard. Lazy import so streamlit is only required when used."""
+    """Run the Streamlit dashboard."""
     from .dashboard import run
     run()
 

@@ -1,20 +1,27 @@
 # NoKeyFinance
 
-Financial data visualization using free sources only (no API keys). Data from Yahoo Finance and Stooq.
+Small Streamlit app for exploring historical market data (no API keys).
 
-## Run the app
+Data sources: Yahoo Finance (via `yfinance`) and Stooq (via `pandas-datareader`).
 
-From the project root:
+## Requirements
+
+- Python 3.10+
+- Dependencies in `requirements.txt`
+
+## Run
 
 ```bash
 pip install -r requirements.txt
 streamlit run finance_app/main.py
 ```
 
-Or:
+Or: `python -m finance_app.main`
 
-```bash
-python -m finance_app.main
-```
+## Usage
 
-Use the sidebar to enter a ticker, optional date range, and data source (Yahoo or Stooq). Charts show price, volume, and optional indicators (SMA, EMA, RSI).
+Use the sidebar to choose a ticker, optional date range, and data source. Turn on “Show indicators” to overlay SMA/EMA and show the RSI panel.
+
+## Tech
+
+Python, Streamlit, pandas, numpy, matplotlib.
